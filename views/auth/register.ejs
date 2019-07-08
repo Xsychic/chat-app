@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>chat | register</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/auth.css">
+    </head>
+    <body>
+        <div class="form-container">
+            
+            <div class="form-body">
+                <span class="form-header">Register</span>
+                
+                <form class="form" action="/register" method="post">
+                    <input type="text" name="username" class="form-input" placeholder="username" required>
+                    <input type="password" name="password" class="form-input" placeholder="password" required>
+                    <input type="submit" class="form-submit" value="Login">
+                </form>
+                
+                <div class="subscript">Already registered? <a class="link" href="/login">Login</a></div>
+           
+            </div>
+            
+        </div>
+        
+        <i class="far fa-comment-dots logo"></i>
+        
+    </body>
+</html>
