@@ -22,12 +22,18 @@
                     </div>
                 </div>
                 <div class="col-8 chat">
+                    <div class="header">
+                        <span class="fake-box"></span>
+                        <span class="header-recipient">John Smith</span>
+                        <a href="/logout" class="header-logout">Logout</a> 
+                    </div>
+                    
                     <div class="chat-history">
                         
                     </div>
                     <div class="new-chat">
-                        <form class="new-message-form" action="/" method="post">
-                            <input class="new-message-input" type="text" name="body" placeholder="Type a message...">
+                        <form class="new-message-form" action="/" method="post" autocomplete="off">
+                            <input class="new-message-input" type="text" name="message" placeholder="Type a message...">
                             <input class="new-message-submit" type="submit" value="send">
                         </form>
                     </div>

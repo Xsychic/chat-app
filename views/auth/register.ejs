@@ -9,24 +9,32 @@
         <link rel="stylesheet" type="text/css" href="/stylesheets/auth.css">
     </head>
     <body>
-        <div class="form-container">
-            
-            <div class="form-body">
-                <span class="form-header">Register</span>
+        <div class="container">
+            <div class="row">
+                <div class="col-form col-lg-8 col-12">
+                    <div class="form-container">
+                        <div class="form-body">
+                            <span class="form-header">Register</span>
+                            
+                            <form class="form" action="/register" method="post">
+                                <input type="text" name="username" class="form-input" placeholder="username" required>
+                                <input type="password" name="password" class="form-input" placeholder="password" required>
+                                <input type="submit" class="form-submit" value="Login">
+                            </form>
+                            
+                            <div class="subscript">Already registered? <a class="link" href="/login">Login</a></div>
+                       
+                        </div>
+                    </div>
+                </div>
                 
-                <form class="form" action="/register" method="post">
-                    <input type="text" name="username" class="form-input" placeholder="username" required>
-                    <input type="password" name="password" class="form-input" placeholder="password" required>
-                    <input type="submit" class="form-submit" value="Login">
-                </form>
-                
-                <div class="subscript">Already registered? <a class="link" href="/login">Login</a></div>
-           
+                <div class="col-logo col-4">
+                    <i class="far fa-comment-dots logo"></i>
+                </div>
             </div>
             
         </div>
         
-        <i class="far fa-comment-dots logo"></i>
         
     </body>
 </html>
