@@ -77,6 +77,10 @@ router.get("/logout", function(req, res){
 });
 
 
+router.get("/", function(req, res) {
+    res.redirect("/chat");
+});
+
 // catch all 404 route
 // router.get("*", function(req, res) {
     // res.render("auth/404");
