@@ -23,6 +23,18 @@ app.use(methodOverride("_method"));
 
 
 // connect to database
+// REMOTE DB
+// mlab db
+mongoose.connect(process.env.MONGO_URL, {
+  auth: {
+    user: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_PASSWORD
+  },
+  useNewUrlParser: true
+});
+
+
+// LOCAL DB
 // db connection
 mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
 // mongoose options to remove deprecation warnings
