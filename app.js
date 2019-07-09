@@ -36,7 +36,7 @@ mongoose.connect(process.env.MONGO_URL, {
 
 // LOCAL DB
 // db connection
-mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
+//mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
 // mongoose options to remove deprecation warnings
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false)
