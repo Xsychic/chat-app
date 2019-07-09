@@ -18,6 +18,9 @@ body {
 .col-logo {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    top: -30px;
 }
 
 .form {
@@ -88,9 +91,7 @@ body {
 .logo {
     font-size: 220px;
     color: #2662c1;
-}
-
-.logo-div {
+    height: 220px;
     display: inline-block;
 }
 

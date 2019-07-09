@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/fa/css/all.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+    </head>
+    <script src="https://20641e504b104833a31f20055867a87a.vfs.cloud9.us-east-1.amazonaws.com:8080/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4 chats">
+                    <div class="header">
+                        <span class="header-recipient">Your chats</span>
+                    </div>
+                    
+                    <% for(var i = 0; i < chats.length; i++) { %>
+                        <a href="/chat/<%= chats[i]._id %>" class="convo">
+                            <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
+                            <div class="convo-details">
+                                <div class="convo-name"><%= chats[i].users[0].username %></div>
+                                <div class="convo-last-message">Hey, what time you going?</div>
+                            </div>
+                        </a>
+                        <hr class="convo-rule"/>
+                    <% } %>
+                </div>
+                <div class="col-8 chat">
+                    <div class="header">
+                        <span class="header-new-chat"></span>
+                        <span class="header-recipient"><%= chat.users[0].username %></span>
+                        <a href="/logout" class="header-logout">Logout</a> 
+                    </div>
+                    
+                    <div id="chat-history">
+                        <div class="message-wrapper">
+                            <div class="message-other">
+                                Test message
+                            </div>                                
+                        </div>
+                    </div>
+                    <div class="new-message">
+                        <form class="new-message-form" action="/chat" method="post" autocomplete="off">
+                            <input class="new-message-input" type="text" name="message" placeholder="Type a message..." autofocus="autofocus">
+                            <input class="new-message-submit" type="submit" value="send">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            var element = document.getElementById("chat-history");
+            
+            function updateChatScroll(element) {
+                element.scrollTop = element.scrollHeight;
+            }
+            
+            window.onLoad = updateChatScroll(element);
+        </script>
+  </body>
+</html>

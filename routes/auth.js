@@ -2,6 +2,7 @@
 var express = require("express"),
     passport = require("passport"),
     mongoose = require("mongoose"),
+    Chat = require("../models/chat"),
     User = require("../models/user"),
     middleware = require("../middleware"),
     router = express.Router();
@@ -18,7 +19,7 @@ router.get("/login", function(req, res) {
 
 // post login form route
 router.post("/login", passport.authenticate("local", {failureRedirect: "/login", failureFlash: false}), function(req, res) {
-    res.redirect("/");
+    res.redirect("/chat");
 });
 
 
@@ -36,14 +37,34 @@ router.post("/register", function(req, res) {
     });
     
     // add new user to database
-    User.register(newUser, req.body.password, function(err, user) {
+    User.register(newUser, req.body.password, function(err, newUser) {
         if(err) {
             console.log(err);
         }
-        console.log(user);
-        // log new user in
-        passport.authenticate("local")(req, res, function() {
-            res.redirect("/");   
+        
+        User.find({}, function(err, users) {
+            if(err) {
+                console.log(err);
+            }
+            
+            // create new chat with each other user
+            users.forEach(function(user) {
+                
+                if(!(newUser._id.equals(user._id))){
+                    var users = [newUser._id, user._id];
+                    
+                    Chat.create({users: users}, function(err, chat) {
+                        if(err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            });
+            
+            // log new user in
+            passport.authenticate("local")(req, res, function() {
+                res.redirect("/chat");                
+            });
         });
     });
 });
@@ -57,9 +78,9 @@ router.get("/logout", function(req, res){
 
 
 // catch all 404 route
-router.get("*", function(req, res) {
-    res.render("auth/404");
-});
+// router.get("*", function(req, res) {
+    // res.render("auth/404");
+// });
 
 
 

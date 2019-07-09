@@ -4,8 +4,10 @@ var express = require("express"),
     User = require("./models/user"),
     bodyParser = require("body-parser"),
     session = require("express-session"),
+    http = require("http").createServer(app),
     localStrategy = require("passport-local"),
     methodOverride = require("method-override"),
+    io = require("socket.io")(http),
     app = express();
     
 
@@ -45,6 +47,17 @@ app.use(passport.session())
 passport.use(new localStrategy(User.authenticate({failureRedirect: "/login", successRedirect: "/", failureFlash: false})));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+//create update server
+io.on('connection', function(socket) {
+   console.log('A user connected');
+
+   //when user disconnects
+   socket.on('disconnect', function () {
+      console.log('A user disconnected');
+   });
+});
 
 
 // import routes
