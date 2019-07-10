@@ -135,7 +135,7 @@
 }
 
 #chat-history {
-  padding: 20px;
+  padding: 30px;
   padding-bottom: 30px;
   max-height: calc(100vh - 110px);
   overflow-y: scroll;
