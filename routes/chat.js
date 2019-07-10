@@ -13,7 +13,7 @@ var express = require("express"),
 
 // get chat list route
 router.get("/chat", middleware.checkUser, function(req, res) {
-    Chat.find({'users':{$in:[req.user._id]}}).populate("users").exec(function(err, chats) {
+    Chat.find({'users':{$in:[req.user._id]}}).populate("users").populate("messages").exec(function(err, chats) {
         if(err) {
             console.log(err);
         }
@@ -34,7 +34,7 @@ router.get("/chat", middleware.checkUser, function(req, res) {
 
 // get chat page route
 router.get("/chat/:chatid", middleware.checkUser, function(req, res) {
-    Chat.find({'users':{$in:[req.user._id]}}).populate("users").exec(function(err, chats) {
+    Chat.find({'users':{$in:[req.user._id]}}).populate("users").populate("messages").exec(function(err, chats) {
         if(err) {
             console.log(err);
         }
@@ -60,7 +60,7 @@ router.get("/chat/:chatid", middleware.checkUser, function(req, res) {
                     chat.users.splice(x,1);
                 }
             }
-            
+
             // render chat page
             res.render("chat/active", {chats: chats, chat: chat, chatId: req.params.chatid, user: req.user}); 
         });

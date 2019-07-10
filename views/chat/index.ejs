@@ -22,7 +22,7 @@
                             <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
                             <div class="convo-details">
                                 <div class="convo-name"><%= chats[i].users[0].username %></div>
-                                <div class="convo-last-message">Hey, what time you going?</div>
+                                <div class="convo-last-message"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
                             </div>
                         </a>
                         <hr class="convo-rule"/>

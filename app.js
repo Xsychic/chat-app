@@ -25,17 +25,17 @@ app.use(methodOverride("_method"));
 // connect to database
 
 // REMOTE DB
-mongoose.connect(process.env.MONGO_URL, {
-  auth: {
-    user: process.env.MONGO_USERNAME,
-    password: process.env.MONGO_PASSWORD
-  },
-  useNewUrlParser: true
-});
+// mongoose.connect(process.env.MONGO_URL, {
+//   auth: {
+//     user: process.env.MONGO_USERNAME,
+//     password: process.env.MONGO_PASSWORD
+//   },
+//   useNewUrlParser: true
+// });
 
 
 // LOCAL DB
-//mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
 
 // mongoose options to remove deprecation warnings
 mongoose.set('useCreateIndex', true);

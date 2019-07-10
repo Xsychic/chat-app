@@ -70,23 +70,24 @@
   font-weight: bold;
 }
 
+.message {
+  border-radius: 7px;
+  display: inline-block;
+  padding: 5px 7px;
+  max-width: 60%;
+  min-width: 40px;
+  text-align: center;
+}
+
 .message-other {
   background: #e5e5e5;
   align-self: flex-start;
-  border-radius: 5px;
-  display: inline-block;
-  padding: 5px;
-  max-width: 60%;
 }
 
 .message-user {
   background: #2662c1;
   align-self: flex-end;
   color: #ffffff;
-  border-radius: 5px;
-  display: inline-block;
-  padding: 5px;
-  max-width: 50%;
 }
 
 .message-wrapper {
