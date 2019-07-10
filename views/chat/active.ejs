@@ -5,14 +5,11 @@
         <meta charset="utf-8">
         <title>chat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/socket.io/socket.io.js"></script>
         <link rel="stylesheet" type="text/css" href="/fa/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
     </head>
-    <script src="https://20641e504b104833a31f20055867a87a.vfs.cloud9.us-east-1.amazonaws.com:8080/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-    </script>
     <body>
         <div class="container-fluid">
             <div class="row">
@@ -40,22 +37,40 @@
                     </div>
                     
                     <div id="chat-history">
-                        <div class="message-wrapper">
-                            <div class="message-other">
-                                Test message
-                            </div>                                
-                        </div>
+                        <% chat.messages.forEach(function(message) { %>
+                            <div class="message-wrapper">
+                                <div class=<%= (message.author.equals(user._id) ? "message-user" : "message-other") %>>
+                                    <%= message.message %>
+                                </div>                                
+                            </div>
+                        <% }); %>
                     </div>
                     <div class="new-message">
-                        <form class="new-message-form" action="/chat" method="post" autocomplete="off">
-                            <input class="new-message-input" type="text" name="message" placeholder="Type a message..." autofocus="autofocus">
-                            <input class="new-message-submit" type="submit" value="send">
-                        </form>
+                        <input id="new-message-input" type="text" name="message" placeholder="Type a message..." autofocus="autofocus" autocomplete="off">
+                        <input id="new-message-submit" type="submit" value="send">
                     </div>
                 </div>
             </div>
         </div>
-        
+        <script>
+            var socket = io.connect({query: "id=<%= chatId %>"});
+            
+            var input = document.getElementById("new-message-input"),
+                submit = document.getElementById("new-message-submit"),
+                chatHistory = document.getElementById("chat-history"),
+                userId = "<%= user._id %>";
+                
+                submit.addEventListener("click", function() {
+                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: userId});
+                    input.innerHTML = "";
+                });
+                
+                socket.on("im", function(data) {
+                    chatHistory.innerHTML += "<div class=\"message-wrapper\"><div class=\"" + (data.sender == "<%= user._id %>" ? "message-user" : "message-other") + "\">" + data.message + "</div></div>";
+                });
+                
+            
+        </script>
         <script>
             var element = document.getElementById("chat-history");
             

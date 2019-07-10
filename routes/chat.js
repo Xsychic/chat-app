@@ -61,7 +61,8 @@ router.get("/chat/:chatid", middleware.checkUser, function(req, res) {
                 }
             }
             
-           res.render("chat/active", {chats: chats, chat: chat}); 
+            // render chat page
+            res.render("chat/active", {chats: chats, chat: chat, chatId: req.params.chatid, user: req.user}); 
         });
     });
 });

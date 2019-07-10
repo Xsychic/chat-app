@@ -1,13 +1,13 @@
 var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
+    Chat = require("./models/chat"),
     User = require("./models/user"),
     bodyParser = require("body-parser"),
     session = require("express-session"),
-    http = require("http").createServer(app),
+    Message = require("./models/message"),
     localStrategy = require("passport-local"),
     methodOverride = require("method-override"),
-    io = require("socket.io")(http),
     app = express();
     
 
@@ -23,8 +23,8 @@ app.use(methodOverride("_method"));
 
 
 // connect to database
+
 // REMOTE DB
-// mlab db
 mongoose.connect(process.env.MONGO_URL, {
   auth: {
     user: process.env.MONGO_USERNAME,
@@ -35,8 +35,8 @@ mongoose.connect(process.env.MONGO_URL, {
 
 
 // LOCAL DB
-// db connection
 //mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
+
 // mongoose options to remove deprecation warnings
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false)
@@ -61,14 +61,43 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-//create update server
-io.on('connection', function(socket) {
-   console.log('A user connected');
+//socket stuff
+var http = require("http").createServer(app),
+    io = require("socket.io").listen(http);
 
-   //when user disconnects
-   socket.on('disconnect', function () {
-      console.log('A user disconnected');
-   });
+
+io.on('connection', function(socket) {
+    
+    // on connection, move user to room with name equal to chat id
+    var chatId = socket.request._query["id"];
+    socket.join(chatId);
+    
+    
+   //when a chat message is received from client
+   socket.on('im', function (data) {
+      
+        //create new message document
+        var datetime = new Date();
+        Message.create({message: data.message, author: mongoose.Types.ObjectId(data.sender), date: datetime}, function(err, message) {
+            if(err) {
+                console.log(err);
+            }
+            
+            // add message to chat
+            Chat.findById(data.room, function(err, chat) {
+                if(err) {
+                    console.log(err);
+                }
+                
+                // add message
+                chat.messages.push(message._id);
+                chat.save();
+               
+                // emit new message to chat
+                io.sockets.in(data.room).emit("im", data); 
+            });
+        });
+    });
 });
 
 
@@ -84,7 +113,7 @@ app.use(authRoutes);
 
 // run server
 
-app.listen(process.env.PORT, process.env.IP, function(err){
+http.listen(process.env.PORT, function(err){
     if(err) {
         console.log(err);
     }
