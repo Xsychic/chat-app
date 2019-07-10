@@ -136,8 +136,15 @@
 
 #chat-history {
   padding: 20px;
+  padding-bottom: 30px;
   max-height: calc(100vh - 110px);
   overflow-y: scroll;
+}
+
+#feedback {
+  position: absolute;
+  bottom: 70px;
+  color: #e5e5e5;
 }
 
 #new-message-input {

@@ -83,7 +83,7 @@
                 
                 // when a typing message is received
                 socket.on("typing", function(data) {
-                    feedback.innerHTML = data.username + " is typing a message...";
+                    feedback.innerHTML = data + " is typing a message...";
                 });
                 
                 
