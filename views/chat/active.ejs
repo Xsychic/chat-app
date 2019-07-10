@@ -69,7 +69,7 @@
                 });
                 
                 input.addEventListener("keypress", function() {
-                    socket.emit("typing", {username: "<%= user.username %>", room: "<%= chatId %>");
+                    socket.emit("typing", {username: "<%= user.username %>", room: "<%= chatId %>"});
                 });
                 
                 
