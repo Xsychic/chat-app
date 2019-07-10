@@ -102,12 +102,12 @@ io.on('connection', function(socket) {
     
     // when a user starts typing
     socket.on("typing", function(data) {
-        io.in(data.room).broadcast("typing", data.username);
+        io.to(data.room).emit("typing", data.username);
     });
     
     // when user stops typing
     socket.on("clear", function(data) {
-        io.in(data.room).broadcast("clear");
+        io.to(data.room).emit("clear");
     })
 });
 
