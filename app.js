@@ -25,17 +25,17 @@ app.use(methodOverride("_method"));
 // connect to database
 
 // REMOTE DB
-mongoose.connect(process.env.MONGO_URL, {
-  auth: {
-    user: process.env.MONGO_USERNAME,
-    password: process.env.MONGO_PASSWORD
-  },
-  useNewUrlParser: true
-});
+// mongoose.connect(process.env.MONGO_URL, {
+//   auth: {
+//     user: process.env.MONGO_USERNAME,
+//     password: process.env.MONGO_PASSWORD
+//   },
+//   useNewUrlParser: true
+// });
 
 
 // LOCAL DB
-// mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
 
 // mongoose options to remove deprecation warnings
 mongoose.set('useCreateIndex', true);
@@ -73,7 +73,7 @@ io.on('connection', function(socket) {
     socket.join(chatId);
     
     
-   //when a chat message is received from client
+   // when a chat message is received from client
    socket.on('im', function (data) {
       
         //create new message document
@@ -98,6 +98,17 @@ io.on('connection', function(socket) {
             });
         });
     });
+    
+    
+    // when a user starts typing
+    socket.on("typing", function(data) {
+        io.to(data.room).emit("typing", data.username);
+    });
+    
+    // when user stops typing
+    socket.on("clear", function(data) {
+        io.to(data.room).emit("clear");
+    })
 });
 
 

@@ -45,6 +45,7 @@
                             </div>
                         <% }); %>
                     </div>
+                    <div id="feedback"></div>
                     <div class="new-message">
                         <input id="new-message-input" type="text" name="message" placeholder="Type a message..." autofocus="autofocus" autocomplete="off">
                         <input id="new-message-submit" type="submit" value="send">
@@ -59,6 +60,7 @@
                 submit = document.getElementById("new-message-submit"),
                 chatHistory = document.getElementById("chat-history"),
                 thisChat = document.getElementById("<%= chatId %>"),
+                feedback = document.getElementById("feedback"),
                 userId = "<%= user._id %>";
                 
                 submit.addEventListener("click", function() {
@@ -66,13 +68,34 @@
                     input.value = "";
                 });
                 
-                socket.on("im", function(data) {
-                    chatHistory.innerHTML += "<div class=\"message-wrapper\"><div class=\"message " + (data.sender == "<%= user._id %>" ? "message-user" : "message-other") + "\">" + data.message + "</div></div>";
-                    thisChat.innerHTML = data.message;
+                input.addEventListener("keypress", function() {
+                    socket.emit("typing", {username: "<%= user.username %>", room: "<%= chatId %>");
                 });
                 
                 
-                // submit form on enter
+                // when a chat message is received
+                socket.on("im", function(data) {
+                    chatHistory.innerHTML += "<div class=\"message-wrapper\"><div class=\"message " + (data.sender == "<%= user._id %>" ? "message-user" : "message-other") + "\">" + data.message + "</div></div>";
+                    thisChat.innerHTML = data.message;
+                    feedback.innerHTML = "";
+                });
+                
+                
+                // when a typing message is received
+                socket.on("typing", function(data) {
+                    feedback.innerHTML = data.username + " is typing a message...";
+                });
+                
+                
+                // when a clear message is received
+                socket.on("clear", function(data) {
+                    feedback.innerHTML = "";
+                });
+                
+                
+                
+                
+                // submit form on enter and check if input is empty to clear typing message
             
                 input.addEventListener("keyup", function(event) {
                       // Number 13 is the "Enter" key on the keyboard
@@ -81,6 +104,10 @@
                         event.preventDefault();
                         // Trigger the button element with a click
                         submit.click();
+                      }
+                      
+                      if (input.value == "") {
+                          socket.emit("clear", {room: "<%= chatId %>"});
                       }
                 });
             
