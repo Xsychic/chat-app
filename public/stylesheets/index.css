@@ -60,14 +60,26 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
+.header-back {
+  display: none;
+  color: #2662c1 !important;
+  font-size: 20px;
+}
+
+.header-back:hover, .header-back:focus {
+    cursor: pointer;
+    color: #365da9;
+    text-decoration: none;
+}
+
+.header-back:active {
+    cursor: grab;
+    color: #2a519d;
+}
+
 .header-logout {
   position: absolute;
   right: 20px;
-}
-
-.header-new-chat {
-  color: #2662c1;
-  outline: none;
 }
 
 .header-recipient {
