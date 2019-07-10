@@ -9,7 +9,7 @@ var express = require("express"),
     localStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     app = express();
-    
+
 
 
 // default view engine (ejs)

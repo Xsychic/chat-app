@@ -60,9 +60,15 @@ router.get("/chat/:chatid", middleware.checkUser, function(req, res) {
                     chat.users.splice(x,1);
                 }
             }
-
-            // render chat page
-            res.render("chat/active", {chats: chats, chat: chat, chatId: req.params.chatid, user: req.user}); 
+            
+            User.find({}, function(err, users) {
+                if(err) {
+                    console.log(err);
+                }
+                
+                // render chat page
+                res.render("chat/active", {chats: chats, chat: chat, chatId: req.params.chatid, user: req.user, users: users});         
+            });
         });
     });
 });

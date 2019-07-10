@@ -82,9 +82,9 @@ router.get("/", function(req, res) {
 });
 
 // catch all 404 route
-// router.get("*", function(req, res) {
-    // res.render("auth/404");
-// });
+router.get("*", function(req, res) {
+    res.render("auth/404");
+});
 
 
 

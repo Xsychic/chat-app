@@ -16,7 +16,9 @@
                 <div class="col-md-4 chats">
                     <div class="header">
                         <span class="header-recipient">Your chats</span>
+                        <a id="open" class="header-icon fas fa-plus"></a>
                     </div>
+                    
                     
                     <% for(var i = 0; i < chats.length; i++) { %>
                         <a href="/chat/<%= chats[i]._id %>" class="convo">
@@ -31,7 +33,7 @@
                 </div>
                 <div class="col-12 col-md-8 chat">
                     <div class="header">
-                        <a href="/chat" class="fas fa-chevron-left header-back"></a>
+                        <a href="/chat" class="fas fa-chevron-left header-icon header-icon-back"></a>
                         <span class="header-recipient"><%= chat.users[0].username %></span>
                         <a href="/logout" class="header-logout">Logout</a> 
                     </div>
@@ -53,6 +55,7 @@
                 </div>
             </div>
         </div>
+        <%- include("../partials/new_modal", {users: users}); %>
         <script>
             var socket = io.connect({query: "id=<%= chatId %>"});
             

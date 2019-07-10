@@ -60,19 +60,18 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
-.header-back {
-  display: none;
+.header-icon {
   color: #2662c1 !important;
   font-size: 20px;
 }
 
-.header-back:hover, .header-back:focus {
+.header-icon:hover, .header-icon:focus {
     cursor: pointer;
     color: #365da9;
     text-decoration: none;
 }
 
-.header-back:active {
+.header-icon:active {
     cursor: grab;
     color: #2a519d;
 }
