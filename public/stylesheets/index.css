@@ -144,7 +144,9 @@
 #feedback {
   position: absolute;
   bottom: 70px;
+  left: 10px;
   color: #e5e5e5;
+  font-weight: bold;
 }
 
 #new-message-input {
