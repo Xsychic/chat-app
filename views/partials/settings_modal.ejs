@@ -52,7 +52,7 @@
 
 
     var close = document.getElementById("settings-close"),
-        open = document.querySelector(".header-settings"),
+        open = document.querySelectorAll(".header-settings"),
         settingsSubmit = document.getElementById("add-user-submit");
     
     // close new chat modal
@@ -61,9 +61,12 @@
         modal.style.display = "none";
     });
 
-    // show new chat modal
-    open.addEventListener("click", function(){
-        document.getElementById("settings-wrapper").style.display = "flex";
+    // add event listener to both settings icons
+    open.forEach(function(element) {
+        // show chat settings modal
+        element.addEventListener("click", function(){
+            document.getElementById("settings-wrapper").style.display = "flex";
+        });  
     });
     
     // post user array when submit is clicked
