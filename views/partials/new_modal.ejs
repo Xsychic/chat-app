@@ -1,0 +1,117 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/new-modal.css">
+<div id="new-chat-wrapper">
+    <div class="new-chat">
+        <a class="fas fa-times" id="new-chat-close" href="#"></a>
+        
+        <h3 class="new-chat-title">New Chat</h3>
+        
+        <div class="new-chat-highlight new-chat-added">
+            <span class="new-chat-added-label">Added: </span>
+            <span id="new-chat-added-names"><%= user.username %></span>
+        </div>
+
+        <div class="new-chat-users">
+            <div class="new-chat-user-wrapper">
+                <% users.forEach(function(add_user) { %> 
+                    <% if(!(add_user._id.equals(user._id))) { %>
+                        <div class="new-chat-user">
+                            <span class="new-chat-username"><%= add_user.username %></span>
+                            <a onclick="return addUser('<%= add_user._id %>','<%= add_user.username %>');" id="<%= add_user._id %>" class="new-chat-user-add fas fa-plus"></a>
+                        </div>
+                    <% }; %>
+                <% }); %>
+            </div>
+        </div>
+        
+        <div class="new-chat-highlight new-chat-submit">
+            <div class="btn btn-sm btn-secondary" id="new-chat-submit">Submit</div>
+        </div>
+    </div>    
+</div>
+
+<script>
+    var close = document.getElementById("new-chat-close"),
+        open = document.getElementById("open"),
+        submit = document.getElementById("new-chat-submit");
+    
+    // close new chat modal
+    close.addEventListener("click", function(){
+        var modal = document.getElementById("new-chat-wrapper");
+        modal.style.display = "none";
+    });
+
+    // show new chat modal
+    open.addEventListener("click", function(){
+        document.getElementById("new-chat-wrapper").style.display = "flex";
+    });
+    
+    // post user array when submit is clicked
+    submit.addEventListener("click", function(){
+        // check if there is at least two users added
+        if(users.length > 1) {
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "/new", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({
+                users: users
+            }));
+            xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                window.location.replace(this.responseText);
+            }
+    };
+        } else {
+            console.log("not enough users added to create a chat");
+        }
+    });
+
+    
+    var users = [{id: '<%= user._id %>', username: '<%= user.username %>'}];
+
+    // add user to the array and display
+    function addUser(userId, userName) {
+        var names = document.getElementById("new-chat-added-names"),
+            icon = document.getElementById(userId);
+        
+        icon.classList.replace("fa-plus", "fa-minus");
+        icon.setAttribute('onclick',"return removeUser('" + userId + "','" + userName + "');");
+        
+        users.push({id: userId, username: userName});
+        names.innerHTML = ""
+        
+        for(var i = users.length - 1; i >= 0; i--) {
+            if(i != users.length - 1) {
+                names.innerHTML += ", ";
+            }
+            names.innerHTML += users[i].username;
+        }
+    }
+    
+    // remove user from array and display
+    function removeUser(userId, userName) {
+        var names = document.getElementById("new-chat-added-names"),
+            icon = document.getElementById(userId);
+
+        icon.classList.replace("fa-minus", "fa-plus");
+        icon.setAttribute('onclick',"addUser('" + userId + "','" + userName + "');");
+        
+        for(var i = 0; i < users.length; i++) {
+            if(users[i].id == userId) {
+                var index = i;
+            }
+        }
+
+        if (typeof index != "undefined" && index > -1) {
+            users.splice(index, 1);
+        } 
+        
+        names.innerHTML = ""
+        
+        for(var i = users.length - 1; i >= 0; i--) {
+            if(i != users.length - 1) {
+                names.innerHTML += ", ";
+            }
+            names.innerHTML += users[i].username;
+        }
+    }
+</script>

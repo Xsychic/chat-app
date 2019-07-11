@@ -47,20 +47,6 @@ router.post("/register", function(req, res) {
                 console.log(err);
             }
             
-            // create new chat with each other user
-            users.forEach(function(user) {
-                
-                if(!(newUser._id.equals(user._id))){
-                    var users = [newUser._id, user._id];
-                    
-                    Chat.create({users: users}, function(err, chat) {
-                        if(err) {
-                            console.log(err);
-                        }
-                    });
-                }
-            });
-            
             // log new user in
             passport.authenticate("local")(req, res, function() {
                 res.redirect("/chat");                

@@ -1,0 +1,132 @@
+.btn:hover {
+    cursor: pointer;
+}
+
+.btn:active {
+    cursor: grab;
+}
+
+.new-chat {
+    background: #ffffff;
+    border-top: 2px solid #e5e5e5;
+    border-left: 2px solid #e5e5e5;
+    border-right: 2px solid #e5e5e5;
+    width: 500px;
+    height: 80vh;
+    position: relative;
+    top: -20px;
+    box-shadow: 2px 3px #dddddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.new-chat-added {
+    border-bottom: 1px solid #cccccc;
+}
+
+.new-chat-added-label {
+    margin-right: 10px;
+}
+
+.new-chat-highlight {
+    background: #e5e5e5;
+    border-top: 1px solid #cccccc;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 40px;
+}
+
+.new-chat-submit {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.new-chat-submit-button {
+    height: 100%;
+    width: 80px;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+}
+
+.new-chat-user {
+    display: block;
+    margin: 5px 0;
+}
+
+.new-chat-username {
+    
+}
+
+.new-chat-user-add {
+    color: #999999;
+    margin-left: 5px;
+}
+
+.new-chat-user-add:focus, .new-chat-user-add:hover {
+    text-decoration: none;
+    color: #666666;
+}
+
+.new-chat-user-add:hover {
+    cursor: pointer;
+}
+
+.new-chat-user-add:active {
+    color: #7f7f7f;
+    cursor: grab;
+}
+
+.new-chat-users {
+    display: flex;
+    justify-content: center;
+    height: calc(80vh - 173px);
+    max-height: calc(80vh - 173px);
+    overflow-y: scroll;
+}
+
+.new-chat-title {
+    align-self: center;
+    margin: 30px 0;
+}
+
+#new-chat-added-names {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#new-chat-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #cccccc;
+}
+
+#new-chat-close:hover, #new-chat-close:focus {
+    color: #ed2939;
+    text-decoration: none;
+}
+
+#new-chat-close:hover {
+    cursor: pointer;
+}
+
+#new-chat-close:active {
+    cursor: grab;
+}
+
+#new-chat-wrapper {
+    position: absolute;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(229, 229, 229, 0.5);
+}

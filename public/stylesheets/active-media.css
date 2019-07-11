@@ -2,10 +2,26 @@
     .chats {
         display: none;
     }
+    
+    .header-settings-centre {
+        display: inline-block;
+    }
+    
+    .header-settings-left {
+        display: none;
+    }
 }
 
 @media only screen and (min-width: 768px) {
     .header-icon-back {
         display: none
+    }
+    
+    .header-settings-centre {
+        display: none;
+    }
+    
+    .header-settings-left {
+        display: inline-block;
     }
 }

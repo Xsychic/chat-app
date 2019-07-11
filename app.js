@@ -16,6 +16,7 @@ var express = require("express"),
 app.set("view engine", "ejs");    
 // separates part of request into req.body
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 // serves the public folder
 app.use(express.static(__dirname + "/public"));
 // allows for put, delete routes
@@ -91,6 +92,7 @@ io.on('connection', function(socket) {
                 
                 // add message
                 chat.messages.push(message._id);
+                chat.lastMessage = new Date();
                 chat.save();
                
                 // emit new message to chat
@@ -108,7 +110,32 @@ io.on('connection', function(socket) {
     // when user stops typing
     socket.on("clear", function(data) {
         socket.broadcast.to(data.room).emit("clear");
-    })
+    });
+    
+    // when a user enters a new group name
+    socket.on("title", function(data) {
+        Chat.findById(data.room, function(err, chat) {
+            if(err) {
+                console.log(err);
+            }
+            
+            chat.title = data.title;
+            
+            Message.create({message: data.username + " changed the chat name to " + data.title + ".", announcement: true, date: new Date()}, function(err, message) {
+                if(err) {
+                    console.log(err);
+                }
+                
+                // add announcement to chat
+                chat.messages.push(message._id);
+                chat.lastMessage = new Date();
+                chat.save();
+
+                // change title and send message to room
+                io.sockets.in(data.room).emit("title", {room: data.room, username: data.username, title: data.title, message: message.message});
+            });
+        });
+    });
 });
 
 

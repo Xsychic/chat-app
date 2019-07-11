@@ -13,37 +13,66 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4 chats">
+                <div class="col-md-4 col-xl-3 chats">
                     <div class="header">
                         <span class="header-recipient">Your chats</span>
                         <a id="open" class="header-icon fas fa-plus"></a>
                     </div>
                     
                     
-                    <% for(var i = 0; i < chats.length; i++) { %>
-                        <a href="/chat/<%= chats[i]._id %>" class="convo">
-                            <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
-                            <div class="convo-details">
-                                <div class="convo-name"><%= chats[i].users[0].username %></div>
-                                <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
-                            </div>
-                        </a>
-                        <hr class="convo-rule"/>
-                    <% } %>
+                    <div class="chats-wrapper">
+                        <% for(var i = 0; i < chats.length; i++) { %>
+                            <a href="/chat/<%= chats[i]._id %>" class="convo">
+                                <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
+                                <div class="convo-details">
+                                    <div class="convo-name" id="<%= chats[i]._id %>-titleOne">
+                                        <% if(chats[i].title) { %>
+                                            <%= chats[i].title %>
+                                        <% } else { %>
+                                            <% for(var x = 0; x < chats[i].users.length; x++) { %>
+                                                <%= chats[i].users[x].username %><% if(x != chats[i].users.length - 1) { %>, <% } %>
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
+                                </div>
+                            </a>
+                            <hr class="convo-rule"/>
+                        <% } %>
+                    </div>
                 </div>
-                <div class="col-12 col-md-8 chat">
+                <div class="col-12 col-md-8 col-xl-9 chat">
                     <div class="header">
-                        <a href="/chat" class="fas fa-chevron-left header-icon header-icon-back"></a>
-                        <span class="header-recipient"><%= chat.users[0].username %></span>
+                        <span class="header-left">
+                            <a href="/chat" class="fas fa-chevron-left header-icon header-icon-back"></a>
+                            <span class="header-settings-left header-settings fas fa-cog"></span>
+                        </span>
+                        <span class="header-centre">
+                            <span class="header-settings-centre header-settings fas fa-cog"></span>
+                            <span class="header-recipient" id="<%= chat._id %>-titleTwo">
+                                <% if(chat.title) { %>
+                                    <%= chat.title %>
+                                <% } else { %>
+                                    <% for(var i = 0; i < chat.users.length; i++) { %>
+                                        <%= chat.users[i].username %><% if(i != chat.users.length - 1) { %>, <% } %>
+                                    <% } %>
+                                <% } %>
+                            </span>
+                        </span>
                         <a href="/logout" class="header-logout">Logout</a> 
                     </div>
                     
                     <div id="chat-history">
                         <% chat.messages.forEach(function(message) { %>
                             <div class="message-wrapper">
-                                <div class="message <%= (message.author.equals(user._id) ? "message-user" : "message-other") %>">
-                                    <%= message.message %>
-                                </div>                                
+                                <% if(message.announcement) { %>
+                                    <div class="announcement"><%= message.message %></div>
+                                <% } else { %>
+                                    <div class="message <%= (message.author.equals(user._id) ? "message-user" : "message-other") %>">
+                                        <div class="message-author"><%= message.author.username %></div>
+                                        <%= message.message %>
+                                    </div>   
+                                <% } %>
                             </div>
                         <% }); %>
                     </div>
@@ -55,7 +84,8 @@
                 </div>
             </div>
         </div>
-        <%- include("../partials/new_modal", {users: users}); %>
+        <%- include("../partials/settings_modal", {users: users, user: user, chat: chat}); %>
+        <%- include("../partials/new_modal", {users: users, user: user}); %>
         <script>
             var socket = io.connect({query: "id=<%= chatId %>"});
             
@@ -64,6 +94,8 @@
                 chatHistory = document.getElementById("chat-history"),
                 thisChat = document.getElementById("<%= chatId %>"),
                 feedback = document.getElementById("feedback"),
+                nameSubmit = document.getElementById("name-submit"),
+                nameInput = document.getElementById("name-input"),
                 userId = "<%= user._id %>";
                 
                 submit.addEventListener("click", function() {
@@ -75,6 +107,13 @@
                     socket.emit("typing", {username: "<%= user.username %>", room: "<%= chatId %>"});
                 });
                 
+                nameSubmit.addEventListener("click", function() {
+                    if(nameInput.value != "") {
+                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>"});    
+                    } else {
+                        console.log("no chat name has been entered");
+                    }
+                });
                 
                 // when a chat message is received
                 socket.on("im", function(data) {
@@ -95,7 +134,16 @@
                     feedback.innerHTML = "";
                 });
                 
-                
+                socket.on("title", function(data) {
+                    var titleOne = document.getElementById(data.room + "-titleOne");    
+                    var titleTwo = document.getElementById(data.room + "-titleTwo");
+                    
+                    titleOne.innerHTML = data.title;
+                    titleTwo.innerHTML = data.title;
+                    
+                    chatHistory.innerHTML += "<div class='message-wrapper'><div class='announcement'>" + data.message + "</div></div>";
+                    thisChat.innerHTML = data.message;
+                });
                 
                 
                 // submit form on enter and check if input is empty to clear typing message

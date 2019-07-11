@@ -1,0 +1,149 @@
+<link rel="stylesheet" type="text/css" href="/stylesheets/settings-modal.css">
+<div id="settings-wrapper">
+    <div class="settings">
+        <a class="fas fa-times" id="settings-close" href="#"></a>
+        
+        <div class="input-group settings-title">
+            <input type="text" class="form-control" placeholder="<%- (chat.title ? chat.title : 'Chat Name') %>"  id="name-input">
+            <div class="input-group-append">
+                <input class="btn btn-outline-secondary" id="name-submit" type="submit" value="Rename">
+            </div>
+        </div>
+        
+        <div class="settings-highlight settings-added">
+            <span class="settings-added-label">Added: </span>
+            <span id="settings-added-names">
+                <%= user.username %>,
+                <% for(var i = 0; i < chat.users.length; i++) { %>
+                    <%= chat.users[i].username %><% if(i != chat.users.length - 1) { %>, <% } %>
+                <% } %>
+            </span>
+        </div>
+        <% //console.log(chat.users); %>
+        <% //console.log(users) %>
+        <div class="settings-users">
+            <div class="users-wrapper" id="users-wrapper">
+                <% function isNotInArray(addUser) { %>
+                    <% for(var x = 0; x < chat.users.length; x++) { %>
+                        <% if(chat.users[x]._id.equals(addUser)) { %>
+                            <% return false %>
+                        <% } %>
+                    <% }; %>
+                    <% return true %>
+                <% } %>
+                <% users.forEach(function(add_user) { %>
+                    <% if(isNotInArray(add_user._id) && !(add_user._id.equals(user._id))) { %>
+                        <div class="settings-user">
+                            <span class="settings-username"><%= add_user.username %></span>
+                            <a onclick="return addAddUser('<%= add_user._id %>','<%= add_user.username %>');" id="<%= add_user._id %>" class="settings-user-add fas fa-plus"></a>
+                        </div>
+                    <% }; %>
+                <% }); %>
+            </div>
+        </div>
+        
+        <div class="settings-highlight settings-submit">
+            <div class="btn btn-sm btn-secondary" id="add-user-submit">Add User</div>
+        </div>
+    </div>    
+</div>
+
+<script>
+
+
+    var close = document.getElementById("settings-close"),
+        open = document.querySelector(".header-settings"),
+        settingsSubmit = document.getElementById("add-user-submit");
+    
+    // close new chat modal
+    close.addEventListener("click", function(){
+        var modal = document.getElementById("settings-wrapper");
+        modal.style.display = "none";
+    });
+
+    // show new chat modal
+    open.addEventListener("click", function(){
+        document.getElementById("settings-wrapper").style.display = "flex";
+    });
+    
+    // post user array when submit is clicked
+    settingsSubmit.addEventListener("click", function(){
+        // check if there is at least two users added
+        if(newUsers.length > 0) {
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "/add/" + '<%= chat._id %>', true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({
+                newUsers: newUsers
+            }));
+            xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                window.location.replace(this.responseText);
+            }
+    };
+        } else {
+            console.log("haven't selected a user to add to the chat");
+        }
+    });
+
+    <% var existingUsers = []; %>
+    <% chat.users.forEach(function(existing_user) { %>
+        <% existingUsers.push({id: String(existing_user._id), username: existing_user.username}); %>
+    <% }); %>
+    var existingUsers = <%- JSON.stringify(existingUsers) %>;
+    existingUsers.push({id: '<%= user._id %>', username: '<%= user.username %>'});
+    
+    var newUsers = [];
+    
+    // add user to the array and display
+    function addAddUser(userId, userName) {
+        var settingsNames = document.getElementById("settings-added-names"),
+            icon = document.getElementById(userId);
+        
+        icon.classList.replace("fa-plus", "fa-minus");
+        icon.setAttribute('onclick',"return removeAddUser('" + userId + "','" + userName + "');");
+        
+        newUsers.push({id: userId, username: userName});
+        settingsNames.innerHTML = ""
+
+        var drawArray = existingUsers.concat(newUsers);
+        
+        for(var i = drawArray.length - 1; i >= 0; i--) {
+            if(i != drawArray.length - 1) {
+                settingsNames.innerHTML += ", ";
+            }
+            settingsNames.innerHTML += drawArray[i].username;
+        }
+    }
+    
+    // remove user from array and display
+    function removeAddUser(userId, userName) {
+        var settingsNames = document.getElementById("settings-added-names"),
+            icon = document.getElementById(userId);
+
+        icon.classList.replace("fa-minus", "fa-plus");
+        icon.setAttribute('onclick',"addAddUser('" + userId + "','" + userName + "');");
+        
+        for(var i = 0; i < newUsers.length; i++) {
+            if(newUsers[i].id == userId) {
+                var settingsIndex = i;
+            }
+        }
+
+        if (typeof settingsIndex != "undefined" && settingsIndex > -1) {
+           newUsers.splice(settingsIndex, 1);
+        } 
+        
+        settingsNames.innerHTML = ""
+        
+        var drawArray = existingUsers.concat(newUsers);
+        
+        for(var i = drawArray.length - 1; i >= 0; i--) {
+            if(i != drawArray.length - 1) {
+                settingsNames.innerHTML += ", ";
+            }
+            settingsNames.innerHTML += drawArray[i].username;
+        }
+    }
+    
+</script>
