@@ -141,6 +141,8 @@
                     
                     titleOne.innerHTML = data.title;
                     titleTwo.innerHTML = data.title;
+                    nameInput.placeholder = data.title;
+                    nameInput.value = "";
                     settingsClose.click();
                     
                     chatHistory.innerHTML += "<div class='message-wrapper'><div class='announcement'>" + data.message + "</div></div>";
