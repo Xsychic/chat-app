@@ -67,8 +67,7 @@
             // when a new message is sent to the chat
             socket.on("updateIm", function(data) {
                 var lastChat = document.getElementById(data.room);
-                console.log("123");
-                lastChat.innerHTML = data.user + ": " + data.message;
+                lastChat.innerHTML = data.author + ": " + data.message;
             });
             
             
