@@ -82,19 +82,17 @@
                     var newTitle = data.title;
                 } else {
                     var newTitle = "";
-                    var users = data.users.concat(data.user);
                     
                     
-                    for(var i = 0; i < users.length; i++) {
+                    for(var i = 0; i < indexUsers.length; i++) {
                         // skip iteration if user matches current user
-                        console.log(users[i], users[i].username, "<%= user.username %>");
-                        if(users[i].username == "<%= user.username %>") {
+                        if(indexUsers[i].username == "<%= user.username %>") {
                             console.log(i);                        
                             continue;
                         }
                         // add other users
-                        newTitle += users[i].username
-                        if(i != users.length - 1) {
+                        newTitle += indexUsers[i].username;
+                        if(i != indexUsers.length - 1) {
                             newTitle += ", "
                         }
                     }

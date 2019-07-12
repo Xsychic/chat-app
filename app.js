@@ -147,10 +147,14 @@ io.on('connection', function(socket) {
 
                 // change title and send message to room
                 io.sockets.in(data.room).emit("title", {room: data.room, username: data.username, title: data.title, message: message.message, users: data.users});
-            
+                
+                // create array with all users for index page
+                var indexUsers = data.users;
+                indexUsers.push({username: data.username});
+                
                 // update title on users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users});
+                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
                 });
             });
         });
