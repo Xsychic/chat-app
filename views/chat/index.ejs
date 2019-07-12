@@ -76,28 +76,31 @@
             socket.on("updateTitle", function(data) {
                 var lastChat = document.getElementById(data.room),
                     chatTitle = document.getElementById(data.room + "-title");
-                
-                    // set title in case it has been removed
-                    if(data.title != "") {
-                        var newTitle = data.title;
-                    } else {
-                        var newTitle = "";
-                        var users = data.users.concat(data.user);
-                        
-                        
-                        for(var i = 0; i < users.length; i++) {
-                            // skip iteration if user matches current user
-                            if(users[i].username == "<%= user.username %>") {
-                                continue;
-                            }
-                            // add other users
-                            newTitle += users[i].username
-                            if(i != users.length - 1) {
-                                newTitle += ", "
-                            }
+            
+                // set title in case it has been removed
+                if(data.title != "") {
+                    var newTitle = data.title;
+                } else {
+                    var newTitle = "";
+                    var users = data.users.concat(data.user);
+                    
+                    
+                    for(var i = 0; i < users.length; i++) {
+                        // skip iteration if user matches current user
+                        console.log(users[i], users[i].username, "<%= user.username %>");
+                        if(users[i].username == "<%= user.username %>") {
+                            console.log(i);                        
+                            continue;
+                        }
+                        // add other users
+                        newTitle += users[i].username
+                        if(i != users.length - 1) {
+                            newTitle += ", "
                         }
                     }
-                
+                    console.log(newTitle);
+                }
+                console.log(newTitle);
                 
                 lastChat.innerHTML = data.message;
                 chatTitle.innerHTML = newTitle;            
