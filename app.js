@@ -93,7 +93,6 @@ io.on('connection', function(socket) {
                 // add message
                 chat.messages.push(message._id);
                 chat.lastMessage = new Date();
-                chat.lastAuthor = data.sender.username;
                 chat.save();
                
                data.user = data.sender.username;
@@ -143,6 +142,7 @@ io.on('connection', function(socket) {
                 // add announcement to chat
                 chat.messages.push(message._id);
                 chat.lastMessage = new Date();
+                chat.lastAuthor = undefined;
                 chat.save();
 
                 // change title and send message to room
