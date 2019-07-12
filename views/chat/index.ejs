@@ -68,7 +68,7 @@
             socket.on("updateIm", function(data) {
                 var lastChat = document.getElementById(data.room);
 
-                lastChat.innerHTML = data.message;
+                lastChat.innerHTML = data.user + ": " + data.message;
             });
             
             
@@ -77,7 +77,7 @@
                 var lastChat = document.getElementById(data.room),
                     chatTitle = document.getElementById(data.room + "-title");
                 
-                lastChat.innerHTML = data.user + ": " + data.message;
+                lastChat.innerHTML = data.message;
                 chatTitle.innerHTML = data.title;            
             });
             
