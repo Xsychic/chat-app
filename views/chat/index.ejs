@@ -97,7 +97,7 @@
                     }
                 }
                 
-                lastChat.innerHTML = data.message;
+                lastChat.innerHTML = (typeof data.author != "undefined" ? (data.author == user.username ? "You: " : data.author + ": ") : "") + ": " + data.message;
                 chatTitle.innerHTML = newTitle;            
             });
             

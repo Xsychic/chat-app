@@ -93,16 +93,17 @@ io.on('connection', function(socket) {
                 // add message
                 chat.messages.push(message._id);
                 chat.lastMessage = new Date();
+                chat.lastAuthor = data.sender.username;
                 chat.save();
                
-               data.user = data.sender.username;
+               data.author = data.sender.username;
                
                 // emit new message to chat
                 io.sockets.in(data.room).emit("im", data); 
                 
                 // update users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, user: data.sender.username, room: data.room});
+                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
                 });
             });
         });
