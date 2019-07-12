@@ -79,7 +79,7 @@ io.on('connection', function(socket) {
       
         //create new message document
         var datetime = new Date();
-        Message.create({message: data.message, author: mongoose.Types.ObjectId(data.sender._id), date: datetime}, function(err, message) {
+        Message.create({message: data.message, author: mongoose.Types.ObjectId(data.sender), date: datetime}, function(err, message) {
             if(err) {
                 console.log(err);
             }
@@ -100,7 +100,7 @@ io.on('connection', function(socket) {
                 
                 // update users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, user: user, room: data.room, sender: data.sender});
+                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, user: user, room: data.room});
                 });
             });
         });

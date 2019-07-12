@@ -99,7 +99,7 @@
                 userId = "<%= user._id %>";
                 
                 submit.addEventListener("click", function() {
-                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: <%= user %>, users: <%- JSON.stringify(chat.users) %>});
+                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: "<%= user._id %>", users: <%- JSON.stringify(chat.users) %>});
                     input.value = "";
                 });
                 
