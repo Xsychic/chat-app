@@ -9,13 +9,14 @@
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/index-media.css">
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md-4 col-xl-3 chats">
                     <div class="header">
-                        <span class="header-recipient">Your chats</span>
+                        <span class="header-title">Your chats</span>
                         <a id="open" class="header-icon fas fa-plus"></a>
                     </div>
                     
@@ -24,7 +25,7 @@
                             <a href="/chat/<%= chats[i]._id %>" class="convo">
                                 <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
                                 <div class="convo-details">
-                                    <div class="convo-name">
+                                    <div class="convo-name" id="<%= chats[i]._id %>-title">
                                         <% if(chats[i].title) { %>
                                             <%= chats[i].title %>
                                         <% } else { %>
@@ -33,7 +34,7 @@
                                             <% } %>
                                         <% } %>
                                     </div>
-                                    <div class="convo-last-message"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
+                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
                                 </div>
                             </a>
                             <hr class="convo-rule"/>
@@ -42,7 +43,7 @@
                 </div>
                 <div class="col-md-8 col-xl-9 chat">
                     <div class="header">
-                        <span class="header-new-chat"></span>
+                        <span class="header-filler"></span>
                         <span class="header-recipient">Chat</span>
                         <a href="/logout" class="header-logout">Logout</a> 
                     </div>
@@ -61,6 +62,26 @@
         <%- include("../partials/new_modal", {users: users, user: user}); %>
         
         <script>
+            var socket = io.connect({query: "id=<%= user._id %>"});
+            
+            // when a new message is sent to the chat
+            socket.on("updateIm", function(data) {
+                var lastChat = document.getElementById(data.room);
+
+                lastChat.innerHTML = data.message;
+            });
+            
+            
+            // when a new title is set on a chat
+            socket.on("updateTitle", function(data) {
+                var lastChat = document.getElementById(data.room),
+                    chatTitle = document.getElementById(data.room + "-title");
+                
+                lastChat.innerHTML = data.message;
+                chatTitle.innerHTML = data.message;            
+            });
+            
+            
             var element = document.getElementById("chat-history");
             
             function updateChatScroll(element) {

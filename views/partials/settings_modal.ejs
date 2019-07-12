@@ -51,12 +51,12 @@
 <script>
 
 
-    var close = document.getElementById("settings-close"),
+    var settingsClose = document.getElementById("settings-close"),
         open = document.querySelectorAll(".header-settings"),
         settingsSubmit = document.getElementById("add-user-submit");
     
     // close new chat modal
-    close.addEventListener("click", function(){
+    settingsClose.addEventListener("click", function(){
         var modal = document.getElementById("settings-wrapper");
         modal.style.display = "none";
     });

@@ -83,7 +83,13 @@
 }
 
 .header-centre {
-  /*align-self: center;*/
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.header-filler {
   flex: 1;
 }
 
@@ -112,12 +118,13 @@
 }
 
 .header-recipient {
-  margin: auto;
   font-weight: bold;
   max-width: calc(100% - 150px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  margin: 0;
 }
 
 .header-settings {
@@ -139,10 +146,21 @@
 
 .header-settings-centre {
   margin-right: 5px;
+  position: absolute;
+  left: -25px;
 }
 
 .header-settings-left {
   
+}
+
+.header-title {
+  font-weight: bold;
+  max-width: calc(100% - 150px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: auto;
 }
 
 .message {

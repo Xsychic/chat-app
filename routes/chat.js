@@ -47,7 +47,7 @@ router.get("/chat/:chatid", middleware.checkUser, middleware.checkParticipation,
         if(err) {
             console.log(err);
         }
-        
+
         // remove self from users
         for(var i = 0; i < chats.length; i++) {
             for(var x = 0; x < chats[i].users.length; x++) {

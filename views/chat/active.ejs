@@ -4,18 +4,18 @@
         <meta charset="utf-8">
         <title>chat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/socket.io/socket.io.js"></script>
         <link rel="stylesheet" type="text/css" href="/fa/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/active-media.css">
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4 col-xl-3 chats">
                     <div class="header">
-                        <span class="header-recipient">Your chats</span>
+                        <span class="header-title">Your chats</span>
                         <a id="open" class="header-icon fas fa-plus"></a>
                     </div>
                     
@@ -99,7 +99,7 @@
                 userId = "<%= user._id %>";
                 
                 submit.addEventListener("click", function() {
-                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: userId});
+                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: <%= user %>, users: <%- JSON.stringify(chat.users) %>});
                     input.value = "";
                 });
                 
@@ -109,7 +109,7 @@
                 
                 nameSubmit.addEventListener("click", function() {
                     if(nameInput.value != "") {
-                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>"});    
+                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
                     } else {
                         console.log("no chat name has been entered");
                     }
@@ -137,9 +137,11 @@
                 socket.on("title", function(data) {
                     var titleOne = document.getElementById(data.room + "-titleOne");    
                     var titleTwo = document.getElementById(data.room + "-titleTwo");
+                    var settingsClose = document.getElementById("settings-close");
                     
                     titleOne.innerHTML = data.title;
                     titleTwo.innerHTML = data.title;
+                    settingsClose.click();
                     
                     chatHistory.innerHTML += "<div class='message-wrapper'><div class='announcement'>" + data.message + "</div></div>";
                     thisChat.innerHTML = data.message;
