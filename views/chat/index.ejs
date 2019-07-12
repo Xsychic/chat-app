@@ -34,7 +34,7 @@
                                             <% } %>
                                         <% } %>
                                     </div>
-                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (typeof chats[i].lastAuthor != "undefined" ? chats[i].lastAuthor + ": " : "") %><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
+                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (typeof chats[i].lastAuthor != "undefined" ? (chats[i].lastAuthor == user.username ? "You: " : chats[i].lastAuthor + ": ") : "") %><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
                                 </div>
                             </a>
                             <hr class="convo-rule"/>
@@ -87,7 +87,6 @@
                     for(var i = 0; i < data.indexUsers.length; i++) {
                         // skip iteration if user matches current user
                         if(data.indexUsers[i].username == "<%= user.username %>") {
-                            console.log(i);                        
                             continue;
                         }
                         // add other users
@@ -96,9 +95,7 @@
                             newTitle += ", "
                         }
                     }
-                    console.log(newTitle);
                 }
-                console.log(newTitle);
                 
                 lastChat.innerHTML = data.message;
                 chatTitle.innerHTML = newTitle;            
