@@ -103,7 +103,7 @@ io.on('connection', function(socket) {
                 
                 // update users index page
                 data.users.forEach(function(user) {
-                    io.in(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
+                    io.sockets.(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
                 });
             });
         });
@@ -155,7 +155,7 @@ io.on('connection', function(socket) {
                 
                 // update title on users index page
                 data.users.forEach(function(user) {
-                    io.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
+                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
                 });
             });
         });
