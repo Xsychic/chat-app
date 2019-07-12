@@ -77,8 +77,25 @@
                 var lastChat = document.getElementById(data.room),
                     chatTitle = document.getElementById(data.room + "-title");
                 
+                    // set title in case it has been removed
+                    if(data.title != "") {
+                        var newTitle = data.title;
+                    } else {
+                        var newTitle = "";
+                        var users = data.users.concat(data.user);
+                        
+                        
+                        for(var i = 0; i < users.length; i++) {
+                            newTitle += users[i].username
+                            if(i != users.length - 1) {
+                                newTitle += ", "
+                            }
+                        }
+                    }
+                
+                
                 lastChat.innerHTML = data.message;
-                chatTitle.innerHTML = data.title;            
+                chatTitle.innerHTML = newTitle;            
             });
             
             

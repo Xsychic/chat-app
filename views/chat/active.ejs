@@ -141,15 +141,15 @@
                         
                     } else {
                         var newTitle = "";
+                        var users = <%- JSON.stringify(chat.users); %>
                         
-                        for(var i = 0; i < data.users.length; i++) {
-                            newTitle += data.users[i].username
-                            if(i != data.users.length - 1) {
+                        
+                        for(var i = 0; i < users.length; i++) {
+                            newTitle += users[i].username
+                            if(i != users.length - 1) {
                                 newTitle += ", "
                             }
                         }
-                        
-                        
                     }
                     
                     titleOne.innerHTML = newTitle;
