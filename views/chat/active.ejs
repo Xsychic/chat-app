@@ -108,7 +108,11 @@
                 });
                 
                 nameSubmit.addEventListener("click", function() {
-                    socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
+                    if (nameInput.value == "") {
+                        socket.emit("title", {title: false, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
+                    } else {
+                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
+                    }
                 });
                 
                 // when a chat message is received
