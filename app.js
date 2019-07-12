@@ -3,6 +3,7 @@ var express = require("express"),
     passport = require("passport"),
     Chat = require("./models/chat"),
     User = require("./models/user"),
+    flash = require("connect-flash"),
     bodyParser = require("body-parser"),
     session = require("express-session"),
     Message = require("./models/message"),
@@ -23,6 +24,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 
 
+
 // connect to database
 
 // REMOTE DB
@@ -37,6 +39,7 @@ mongoose.connect(process.env.MONGO_URL, {
 
 // LOCAL DB
 // mongoose.connect("mongodb://localhost/chat", {useNewUrlParser: true});
+// require("dotenv").config()
 
 // mongoose options to remove deprecation warnings
 mongoose.set('useCreateIndex', true);
@@ -57,9 +60,27 @@ app.use(passport.session())
 
 
 // local verification strategy
-passport.use(new localStrategy(User.authenticate({failureRedirect: "/login", successRedirect: "/", failureFlash: false})));
+passport.use(new localStrategy(User.authenticate({failureRedirect: "/login", successRedirect: "/", failureFlash: true})));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+// flash message config
+app.use(flash());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}));
+
+
+// set flash message and user areas in res.locals and reset session removal date
+app.use(function(req, res, next) {
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    return next();
+});
+
 
 
 //socket stuff

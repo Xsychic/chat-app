@@ -16,7 +16,8 @@ var express = require("express"),
 router.get("/chat", middleware.checkUser, function(req, res) {
     Chat.find({'users':{$in:[req.user._id]}}).populate("users").populate("messages").sort({lastMessage: -1}).exec(function(err, chats) {
         if(err) {
-            console.log(err);
+            req.flash("error", "Database error - Chat. Please try again later.");
+            return res.redirect("/login");
         }
 
         // remove self from users
@@ -31,7 +32,8 @@ router.get("/chat", middleware.checkUser, function(req, res) {
         // get list of users
         User.find({}, function(err, users) {
             if(err) {
-                console.log(err);
+                req.flash("error", "Database error - User. Please try again later.");
+                return res.redirect("/login");
             }
             
             // render page
@@ -45,7 +47,8 @@ router.get("/chat", middleware.checkUser, function(req, res) {
 router.get("/chat/:chatid", middleware.checkUser, middleware.checkParticipation, function(req, res) {
     Chat.find({'users':{$in:[req.user._id]}}).populate("users").populate({path:'messages', options: {sort: {date: 1}}}).sort({lastMessage: -1}).exec(function(err, chats) {
         if(err) {
-            console.log(err);
+            req.flash("error", "Database error - Chat. Please try again later.");
+            return res.redirect("/chat");
         }
 
         // remove self from users
@@ -60,7 +63,8 @@ router.get("/chat/:chatid", middleware.checkUser, middleware.checkParticipation,
         // get chat from url
         Chat.findById(req.params.chatid).populate("users").populate({path:'messages'}).sort({'messages.date': -1}).exec(function(err, chat) {
             if(err) {
-                console.log(err);
+                req.flash("error", "Database error - Chat. Please try again later.");
+                return res.redirect("/chat");
             }
             
             // remove self from users
@@ -72,7 +76,8 @@ router.get("/chat/:chatid", middleware.checkUser, middleware.checkParticipation,
             
             User.find({}, function(err, users) {
                 if(err) {
-                    console.log(err);
+                    req.flash("error", "Database error - User. Please try again later.");
+                    return res.redirect("/chat");
                 }
                 
                 // populate message authors
@@ -82,7 +87,8 @@ router.get("/chat/:chatid", middleware.checkUser, middleware.checkParticipation,
                     model: User
                 }, function(err, thing) {
                     if(err) {
-                        console.log(err);
+                        req.flash("error", "Database error - Chat(Message). Please try again later.");
+                        return res.redirect("/chat");
                     }
                     
                     return res.render("chat/active", {chats: chats, chat: chat, chatId: req.params.chatid, user: req.user, users: users});         
@@ -108,18 +114,20 @@ router.post("/new", middleware.checkUser, function(req, res) {
     
     Chat.findOne({"users" : {"$all" : newChat.users}}, function(err, chat) {
         if(err) {
-            console.log(err);
+            req.flash("error", "Database error - Chat. Please try again later.");
+            return res.redirect("/chat");
         }
         
         if(chat) {
             // chat already exists
-            console.log("chat already exists");
+            req.flash("error", "Unable to create chat: this chat already exists.");
             res.send("/chat/" + chat._id);
         } else {
             // create new chat
             Chat.create(newChat, function(err, newChat) {
                 if(err) {
-                    console.log(err);
+                    req.flash("error", "Database error - Chat. Please try again later.");
+                    return res.redirect("/chat");
                 }
                 
                 res.send("/chat/" + newChat._id);
@@ -135,30 +143,32 @@ router.post("/add/:chatid", middleware.checkUser, function(req, res) {
     // find chat being modified
     Chat.findById(req.params.chatid, function(err, addChat) {
         if(err) {
-            console.log(err);
+            req.flash("error", "Database error - Chat. Please try again later.");
+            return res.redirect("/chat");
         }
         
         var names = [];
-        console.log(req.body);
+
         // add new user(s) to chat
         for(var i = 0; i < req.body.newUsers.length; i++) {
             addChat.users.push(req.body.newUsers[i].id);
             names.push(req.body.newUsers[i].username);
         }
-        console.log(names);
+
         // save chat
         addChat.save();
         
         // create announcement message
         if(names.length == 1) {
-            var message = names[0] + " has joined the group"
+            var message = names[0] + " has joined the group";
         } else {
             var message = names[0] + " and " + String(names.length - 1) + " people have joined the group"; 
         }
         
         Message.create({message: message, date: new Date(), announcement: true}, function(err, message) {
             if(err) {
-                console.log(err);
+                req.flash("error", "Database error - Message. Please try again later.");
+                return res.redirect("/chat");
             }
             
             // add message to chat

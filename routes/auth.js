@@ -18,7 +18,7 @@ router.get("/login", function(req, res) {
 
 
 // post login form route
-router.post("/login", passport.authenticate("local", {failureRedirect: "/login", failureFlash: false}), function(req, res) {
+router.post("/login", passport.authenticate("local", {failureRedirect: "/login", failureFlash: true}), function(req, res) {
     res.redirect("/chat");
 });
 
@@ -39,12 +39,14 @@ router.post("/register", function(req, res) {
     // add new user to database
     User.register(newUser, req.body.password, function(err, newUser) {
         if(err) {
-            console.log(err);
+            req.flash("error", "Database error - User. Please try again later.");
+            return res.redirect("/register");
         }
         
         User.find({}, function(err, users) {
             if(err) {
-                console.log(err);
+                req.flash("error", "Database error - User. Please try again later.");
+                return res.redirect("/register");
             }
             
             // log new user in

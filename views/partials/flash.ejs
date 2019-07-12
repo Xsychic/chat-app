@@ -1,0 +1,37 @@
+<% if(error.length || success.length) { %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/flash.css">
+    <div class="flash-pane">
+        <% if(success.length > 0) { %>
+            <div class="flash-container flash-container-success" id="successFlash">
+                <div class="flash-body">
+                    <i class="fa fa-times flash-close" title="Close Message" id="closeSuccess"></i>
+                    <i class="fas fa-check flash-icon flash-icon-success"></i>
+                    <p class="flash-message"><%= (success.length < 126 ? success : success.substring(0,126) + "..."); %></p>
+                </div>
+            </div>
+        <% } if(error.length > 0) { %>
+            <div class="flash-container flash-container-error" id="errorFlash">
+                <div class="flash-body">
+                    <i class="fa fa-times flash-close" title="Close Message" id="closeError"></i>
+                    <i class="fas fa-exclamation flash-icon flash-icon error"></i>
+                    <p class="flash-message"><%= (error.length < 126 ? error : error.substring(0,126) + "..."); %></p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+<% } %>
+
+<script>
+    if(document.querySelector("#closeSuccess")) {
+        // if success flash is open, add close function
+        document.querySelector("#closeSuccess").addEventListener("click", function(){
+            document.querySelector("#successFlash").style.display = "none";
+        });
+    } if(document.querySelector("#closeError")) {
+        // if error flash is open, add close function
+        document.querySelector("#closeError").addEventListener("click", function(){
+            document.querySelector("#errorFlash").style.display = "none";
+        });
+    }
+    
+</script>

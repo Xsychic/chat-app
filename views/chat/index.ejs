@@ -60,6 +60,7 @@
         </div>
         
         <%- include("../partials/new_modal", {users: users, user: user}); %>
+        <%- include("../partials/flash"); %>
         
         <script>
             var socket = io.connect({query: "id=<%= user._id %>"});

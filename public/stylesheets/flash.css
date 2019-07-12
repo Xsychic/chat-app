@@ -1,0 +1,65 @@
+.flash-close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+.flash-close:hover {
+    color: #ff0522;
+    cursor: pointer;
+    transition-duration: 0.05s;
+}
+
+.flash-close:active {
+    color: #d60a22;
+    cursor: grab;
+}
+
+.flash-container {
+    height: 130px;
+    width: 350px;
+    background-color: #ffffff;
+    margin-top: 15px;
+    border: 1px solid #000000;
+    padding: 15px 38px 15px 20px;
+    border-left: 24px solid #000000;
+    border-radius: 3px;
+    position: relative;
+    /*transition-duration: 2s;*/
+}
+
+.flash-container-error {
+    border-color: red;
+}
+
+.flash-container-success {
+    border-color: green;
+}
+
+.flash-icon {
+    position: absolute;
+    top: calc(50% - 8px);
+    left: -15px;
+    color: #ffffff;
+}
+
+.flash-icon-error {
+    left: -15px;
+}
+
+.flash-icon-success {
+    left: -20px;
+}
+
+.flash-message {
+    font-size: 17px;
+}
+
+.flash-pane {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}

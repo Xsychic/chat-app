@@ -87,6 +87,8 @@
         </div>
         <%- include("../partials/settings_modal", {users: users, user: user, chat: chat}); %>
         <%- include("../partials/new_modal", {users: users, user: user}); %>
+        <%- include("../partials/flash"); %>
+        
         <script>
             var socket = io.connect({query: "id=<%= chatId %>"});
             
