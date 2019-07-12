@@ -84,15 +84,15 @@
                     var newTitle = "";
                     
                     
-                    for(var i = 0; i < indexUsers.length; i++) {
+                    for(var i = 0; i < data.indexUsers.length; i++) {
                         // skip iteration if user matches current user
-                        if(indexUsers[i].username == "<%= user.username %>") {
+                        if(data.indexUsers[i].username == "<%= user.username %>") {
                             console.log(i);                        
                             continue;
                         }
                         // add other users
-                        newTitle += indexUsers[i].username;
-                        if(i != indexUsers.length - 1) {
+                        newTitle += data.indexUsers[i].username;
+                        if(i != data.indexUsers.length - 1) {
                             newTitle += ", "
                         }
                     }
