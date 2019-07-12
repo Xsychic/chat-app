@@ -115,7 +115,7 @@
                 // when a chat message is received
                 socket.on("im", function(data) {
                     chatHistory.innerHTML += "<div class=\"message-wrapper\"><div class=\"message " + (data.sender.id == "<%= user._id %>" ? "message-user" : "message-other") + "\">" + data.message + "</div></div>";
-                    thisChat.innerHTML = (typeof data.author != "undefined" ? (data.author == user.username ? "You: " : data.author + ": ") : "") + ": " + data.message;
+                    thisChat.innerHTML = (typeof data.author != "undefined" ? (data.author == "<%= user.username %>" ? "You: " : data.author + ": ") : "") + data.message;
                     feedback.innerHTML = "";
                 });
                 
