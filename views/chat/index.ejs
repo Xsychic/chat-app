@@ -34,7 +34,7 @@
                                             <% } %>
                                         <% } %>
                                     </div>
-                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
+                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (typeof chats[i].lastAuthor != "undefined" ? chats[i].lastAuthor + ": " : "") %><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
                                 </div>
                             </a>
                             <hr class="convo-rule"/>
@@ -77,7 +77,7 @@
                 var lastChat = document.getElementById(data.room),
                     chatTitle = document.getElementById(data.room + "-title");
                 
-                lastChat.innerHTML = data.message;
+                lastChat.innerHTML = data.user + ": " + data.message;
                 chatTitle.innerHTML = data.title;            
             });
             

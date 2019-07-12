@@ -34,7 +34,7 @@
                                             <% } %>
                                         <% } %>
                                     </div>
-                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
+                                    <div class="convo-last-message" id="<%= chats[i]._id %>"><%= (typeof chats[i].lastAuthor != "undefined" ? chats[i].lastAuthor + ": " : "") %><%= (chats[i].messages.length > 0 ? chats[i].messages[chats[i].messages.length - 1].message : "") %></div>
                                 </div>
                             </a>
                             <hr class="convo-rule"/>
@@ -99,7 +99,7 @@
                 userId = "<%= user._id %>";
                 
                 submit.addEventListener("click", function() {
-                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: "<%= user._id %>", users: <%- JSON.stringify(chat.users) %>});
+                    socket.emit("im", {message: input.value, room: "<%= chatId %>", sender: {id: "<%= user._id %>", username: "<%= user.username %>"}, users: <%- JSON.stringify(chat.users) %>});
                     input.value = "";
                 });
                 
@@ -108,17 +108,13 @@
                 });
                 
                 nameSubmit.addEventListener("click", function() {
-                    if(nameInput.value != "") {
-                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
-                    } else {
-                        console.log("no chat name has been entered");
-                    }
+                    socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
                 });
                 
                 // when a chat message is received
                 socket.on("im", function(data) {
                     chatHistory.innerHTML += "<div class=\"message-wrapper\"><div class=\"message " + (data.sender == "<%= user._id %>" ? "message-user" : "message-other") + "\">" + data.message + "</div></div>";
-                    thisChat.innerHTML = data.message;
+                    thisChat.innerHTML = data.user + ": " + data.message;
                     feedback.innerHTML = "";
                 });
                 
