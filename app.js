@@ -103,7 +103,7 @@ io.on('connection', function(socket) {
                 
                 // update users index page
                 data.users.forEach(function(user) {
-                    io.sockets.(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
+                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
                 });
             });
         });
