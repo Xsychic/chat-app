@@ -97,13 +97,14 @@ io.on('connection', function(socket) {
                 chat.save();
                
                data.author = data.sender.username;
+               data.users.push({"_id": data.sender._id, username: data.sender.username});
                
                 // emit new message to chat
                 io.sockets.to(data.room).emit("im", data); 
                 
                 // update users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
+                    io.in(String(user._id)).emit("updateIm", {message: data.message, author: data.sender.username, room: data.room});
                 });
             });
         });
@@ -145,6 +146,9 @@ io.on('connection', function(socket) {
                 chat.lastMessage = new Date();
                 chat.lastAuthor = undefined;
                 chat.save();
+                
+               data.users.push({"_id": data.sender._id, username: data.sender.username});
+
 
                 // change title and send message to room
                 io.sockets.to(data.room).emit("title", {room: data.room, username: data.username, title: data.title, message: message.message, users: data.users});
@@ -155,7 +159,7 @@ io.on('connection', function(socket) {
                 
                 // update title on users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
+                    io.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
                 });
             });
         });
