@@ -99,7 +99,7 @@ io.on('connection', function(socket) {
                data.author = data.sender.username;
                
                 // emit new message to chat
-                io.sockets.in(data.room).emit("im", data); 
+                io.sockets.to(data.room).emit("im", data); 
                 
                 // update users index page
                 data.users.forEach(function(user) {
@@ -155,7 +155,7 @@ io.on('connection', function(socket) {
                 
                 // update title on users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
+                    io.sockets.to(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users, indexUsers: indexUsers});
                 });
             });
         });
