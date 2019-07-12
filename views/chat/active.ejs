@@ -26,7 +26,8 @@
                                 <img src="https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-1/c15.0.50.50a/p50x50/10354686_10150004552801856_220367501106153455_n.jpg?_nc_cat=1&_nc_oc=AQlWS01-eRh1CzpBEwRIj0am3ZWCOK5w1qdN_kfSRtRG1d377sZscoaWgcm1m7yf5-qvoMGhKXwC2nd4oRrIwzX2&_nc_ht=scontent-lhr3-1.xx&oh=da76d564acf68fa4b659d8404299d4da&oe=5D7C5EE8" class="convo-image" />
                                 <div class="convo-details">
                                     <div class="convo-name" id="<%= chats[i]._id %>-titleOne">
-                                        <% if(chats[i].title) { %>
+                                        <% console.log(chats[i].title); %>
+                                        <% if(chats[i].title && chats[i].title != "") { %>
                                             <%= chats[i].title %>
                                         <% } else { %>
                                             <% for(var x = 0; x < chats[i].users.length; x++) { %>
@@ -50,7 +51,7 @@
                         <span class="header-centre">
                             <span class="header-settings-centre header-settings fas fa-cog"></span>
                             <span class="header-recipient" id="<%= chat._id %>-titleTwo">
-                                <% if(chat.title) { %>
+                                <% if(chat.title && chat.title != "") { %>
                                     <%= chat.title %>
                                 <% } else { %>
                                     <% for(var i = 0; i < chat.users.length; i++) { %>
@@ -108,11 +109,7 @@
                 });
                 
                 nameSubmit.addEventListener("click", function() {
-                    if (nameInput.value == "") {
-                        socket.emit("title", {title: false, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
-                    } else {
-                        socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
-                    }
+                    socket.emit("title", {title: nameInput.value, username: "<%= user.username %>", room: "<%= chatId %>", users: <%- JSON.stringify(chat.users) %>});    
                 });
                 
                 // when a chat message is received
@@ -139,9 +136,26 @@
                     var titleTwo = document.getElementById(data.room + "-titleTwo");
                     var settingsClose = document.getElementById("settings-close");
                     
-                    titleOne.innerHTML = data.title;
-                    titleTwo.innerHTML = data.title;
-                    nameInput.placeholder = data.title;
+                    if(data.title != "") {
+                        var newTitle = data.title;
+                        
+                    } else {
+                        var newTitle = "";
+                        
+                        for(var i = 0; i < data.users.length; i++) {
+                            newTitle += data.users[i].username
+                            if(i != data.users.length - 1) {
+                                newTitle += ", "
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    titleOne.innerHTML = newTitle;
+                    titleTwo.innerHTML = newTitle;
+                    
+                    nameInput.placeholder = newTitle;
                     nameInput.value = "";
                     settingsClose.click();
                     

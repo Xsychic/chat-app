@@ -129,7 +129,13 @@ io.on('connection', function(socket) {
             
             chat.title = data.title;
             
-            Message.create({message: data.username + " changed the chat name to " + data.title + ".", announcement: true, date: new Date()}, function(err, message) {
+            if(chat.title == "") {
+                var newMessage = data.username + " removed the chat name.";
+            } else {
+                var newMessage = data.username + " changed the chat name to " + data.title + ".";
+            }
+            
+            Message.create({message: newMessage, announcement: true, date: new Date()}, function(err, message) {
                 if(err) {
                     console.log(err);
                 }
@@ -140,11 +146,11 @@ io.on('connection', function(socket) {
                 chat.save();
 
                 // change title and send message to room
-                io.sockets.in(data.room).emit("title", {room: data.room, username: data.username, title: data.title, message: message.message});
+                io.sockets.in(data.room).emit("title", {room: data.room, username: data.username, title: data.title, message: message.message, users: data.users});
             
                 // update title on users index page
                 data.users.forEach(function(user) {
-                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title});
+                    io.sockets.in(String(user._id)).emit("updateTitle", {message: message.message, user: user, room: data.room, title: data.title, users: data.users});
                 });
             });
         });
