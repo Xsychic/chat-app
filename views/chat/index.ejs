@@ -87,8 +87,7 @@
                         
                         for(var i = 0; i < users.length; i++) {
                             // skip iteration if user matches current user
-                            console.log(String(users[i]._id), "<%= user._id %>");
-                            if(String(users[i]._id) == "<%= user._id %>") {
+                            if(String(users[i].username) === "<%= user.username %>") {
                                 continue;
                             }
                             // add other users
